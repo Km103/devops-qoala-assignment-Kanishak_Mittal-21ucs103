@@ -203,8 +203,6 @@ python_app  | Press CTRL+C to quit
 
 ### Fixes
 
-There are some spelling/syntax errors in the code.
-
 ```diff
 - worker_process auto
 + worker_processes auto;
@@ -239,7 +237,7 @@ http {
 
 
 ### Browser Window
-![alt text](image.png)
+![alt text](screenshots/browser.png)
 
 
 ### Nginx Logs
@@ -324,9 +322,7 @@ The following steps are followed in order to deloy this application on AWS.
 
 - By using Amazon  Elastic Container Service (ECS).
 
-### Domain Name 
 
-- 
 
 
 
