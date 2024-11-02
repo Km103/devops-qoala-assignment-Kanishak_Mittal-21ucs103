@@ -1,6 +1,8 @@
 
-## Goal
-To debug and deploy a Dockerized application.
+## Goals
+- Set up Docker and Docker Compose.
+- Build Docker images and launch containers.
+- Debug and resolve intentional errors in the code to ensure the application runs correctly.
 
 #### The Instructions to this assignment are found [HERE](assignment.md).
 
@@ -242,4 +244,89 @@ http {
 
 ### Nginx Logs
 ![alt text](screenshots/compose_logs.png)
+
+
+## Deployment
+
+The following steps are followed in order to deloy this application on AWS.
+
+- ### Starting ec2 server
+
+    -  **Region** : Asia Pacific (Mumbai) ap-south-1
+    -  **Instance** : t2.micro
+    -  **Image** : Ubuntu
+    -  **Storage** : 8 GB
+    -  **Security Group** : Allow Inbound Access on **ports 80 ,443 , 22** from anywhere.
+
+
+- ### Configuration of the server
+
+    - update the list of available packages and their versions.
+        ```
+        sudo apt update
+        ```
+    - upgrade the server. 
+        ```
+        sudo apt upgrade
+        ```
+    - ### Installing Docker
+        - Set up Docker's apt repository.
+        
+            ```
+            # Add Docker's official GPG key:
+            sudo apt-get update
+            sudo apt-get install ca-certificates curl
+            sudo install -m 0755 -d /etc/apt/keyrings
+            sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+            sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+            # Add the repository to Apt sources:
+            echo \
+            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+            $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            sudo apt-get update
+
+            ```
+        - Install the Docker packages.
+            ```
+            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+            ```
+    
+        - In case of any issue refer to the official [Documentation](https://docs.docker.com/engine/install/ubuntu/)
+
+    
+
+- ### Running the server
+
+    - Clone this  Repository.
+
+    - Build  docker images of both local-nginx and local-python-app.
+
+    - start the docker compose in detachable mode.
+
+        ```
+        sudo docker compose up --detach
+        ```
+
+    - Now we can access the application on the public IP of the server.
+    http://3.111.31.161/
+
+
+### There are also other alternatives to deploy this application.
+
+- Upload the Images to Docker Hub and then pull them on the server machine .
+
+- create the CI/CD pipeline using Jenkins which can be configured to automatically build and deploy the code in production when there is a push request in a repository.
+
+- By using Amazon  Elastic Container Service (ECS).
+
+### DNS Records
+
+
+
+
+
+
+    
 
