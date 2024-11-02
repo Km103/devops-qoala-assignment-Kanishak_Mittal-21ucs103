@@ -262,13 +262,16 @@ The following steps are followed in order to deloy this application on AWS.
 - ### Configuration of the server
 
     - update the list of available packages and their versions.
+
         ```
         sudo apt update
         ```
     - upgrade the server. 
+    
         ```
         sudo apt upgrade
         ```
+    
     - ### Installing Docker
         - Set up Docker's apt repository.
         
@@ -321,7 +324,9 @@ The following steps are followed in order to deloy this application on AWS.
 
 - By using Amazon  Elastic Container Service (ECS).
 
-### DNS Records
+### Domain Name 
+
+- 
 
 
 
