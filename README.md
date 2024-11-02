@@ -1,88 +1,245 @@
-# DevOps Assignment: Debugging and Running a Dockerized Application
 
-Welcome to your DevOps assignment! Your goal is to debug and deploy a Dockerized application. The steps below outline the tasks you’ll complete, including setup, debugging, running, testing, and submitting your work.
+## Goal
+To debug and deploy a Dockerized application.
 
-## Assignment Overview
+#### The Instructions to this assignment are found [HERE](assignment.md).
 
-In this assignment, you’ll:
-1. Set up Docker and Docker Compose.
-2. Build Docker images and launch containers.
-3. Debug and resolve intentional errors in the code to ensure the application runs correctly.
-4. Verify the application in your browser.
-5. Document your process and submit your work.
+### The Report can be found [HERE](report.pdf).
 
----
+## local-nginx
+### Fixing Errors in Dockerfile
 
-## Requirements
+There are some spelling and syntax errors in nginx/Dockerfile that needs to be fixed.
 
-**Tools Needed:**
-- **System:** Use any laptop, PC, or cloud server.
-- **Tools:** Docker and Docker Compose must be installed and configured.
 
----
+``` diff
+- FROM nginx:latests
++ FROM nginx:latest
 
-## Steps
+- COPY nginix.conf /etc/nginx/nginx.conf
++ COPY nginx.conf /etc/nginx/nginx.conf
 
-### 1. Initial Setup
-1. **Clone the GitHub Repository:**
-   - Start by cloning the provided GitHub repository, which contains the `Dockerfiles`, `docker-compose.yml` file, and the application code.
-   
-2. **Build Docker Images:**
-   - Build each Docker image locally using the provided Dockerfiles.
-   - Tag each image appropriately to be referenced by the `docker-compose.yml` file.
+- COPY ./html /usr/share/nginx/htmll
++ COPY ./html /usr/share/nginx/html
 
-### 2. Running the Docker Compose File
-1. **Start the Containers:**
-   - Use the provided `docker-compose.yml` file to launch all containers.
-   - **Note:** There are intentional errors in the code. Part of your assignment is to identify and fix these errors so the application runs correctly.
+- EXPOSE "eighty"
++ EXPOSE 80
 
-### 3. Debugging and Testing
-1. **Identify Issues:**
-   - Check the logs for any errors while building and running containers.
-   - Examine the application code, Dockerfiles, and `docker-compose.yml` file to identify intentional errors.
+- CMD ["nginx", "-g", "daemon of;"]
++ CMD ["nginx", "-g", "daemon off;"]
+```
 
-2. **Resolve Errors:**
-   - Document the issues and explain your debugging steps.
-   - Apply necessary changes to the code, Dockerfiles, or configuration to resolve these errors.
+## Building The image
 
-3. **Verify Website Access:**
-   - Open a web browser and access the application on `http://localhost` (or `http://<server-IP>` if hosted on a cloud server) to confirm it is running correctly.
-   - Check Nginx or other web server logs to confirm requests are being logged as expected.
+### Command
+Run this command inside the nginx directory.
 
-### 4. Submitting the Assignment
-1. **GitHub Repository:**
-   - Create a new GitHub repository and name it in this format: `devops-qoala-assignment-<name>-<rollnumber>`.
-   - Upload all relevant files (including the modified code, Dockerfiles, `docker-compose.yml`, and other configurations) to this repository.
-   - Grant access to `devops@qoala.id`. **Note:** Submissions without access granted will not be considered.
+```sudo docker build . -t local-nginx```
 
-2. **Screenshots:**
-   - Take a screenshot of the application running in the browser.
-   - Include a screenshot showing Nginx (or web server) access logs that confirm a successful request.
+### Error
+The following Error occured while building the Image
 
-3. **Report:**
-   - Write a concise, one-page report that includes:
-     - **Issues Identified:** Summarize any errors encountered during image building, container setup, or application testing.
-     - **Resolution Steps:** Describe each action taken to resolve the issues and ensure the application runs correctly.
+```
+devops-internship-challenge/nginx on  main [!?]
+❯ sudo docker build . -t local-nginx
+[+] Building 1.0s (7/7) FINISHED                                                                                                    docker:default
+ => [internal] load build definition from Dockerfile                                                                                          0.0s
+ => => transferring dockerfile: 331B                                                                                                          0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest                                                                               0.9s
+ => [internal] load .dockerignore                                                                                                             0.0s
+ => => transferring context: 2B                                                                                                               0.0s
+ => CANCELED [1/3] FROM docker.io/library/nginx:latest@sha256:28402db69fec7c17e179ea87882667f1e054391138f77ffaf0c3eb388efc3ffb                0.0s
+ => => resolve docker.io/library/nginx:latest@sha256:28402db69fec7c17e179ea87882667f1e054391138f77ffaf0c3eb388efc3ffb                         0.0s
+ => => sha256:28402db69fec7c17e179ea87882667f1e054391138f77ffaf0c3eb388efc3ffb 10.27kB / 10.27kB                                              0.0s
+ => [internal] load build context                                                                                                             0.0s
+ => => transferring context: 32B                                                                                                              0.0s
+ => CACHED [2/3] COPY nginx.conf /etc/nginx/nginx.conf                                                                                        0.0s
+ => ERROR [3/3] COPY ./html /usr/share/nginx/html                                                                                             0.0s
+------
+ > [3/3] COPY ./html /usr/share/nginx/html:
+------
+Dockerfile:8
+--------------------
+   6 |
+   7 |     # COPY ./html /usr/share/nginx/htmll
+   8 | >>> COPY ./html /usr/share/nginx/html
+   9 |
+  10 |     # EXPOSE "eighty"
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref eb356f46-ebef-426c-8bca-9feff0d9748a::akta2ioo31arw0iyptez3f66z: "/html": not found
+```
+- The error indicates that the html folder doesn't exist inside the nginx folder.
 
----
+### Fix
 
-## Bonus Points
+create the html folder inside the nginx folder.
 
-### Cloud Deployment
-- For extra credit, deploy the application on a cloud server (AWS, GCP, or Azure) and provide an accessible endpoint, such as an IP address or DNS record.
-- This will allow your work to be verified through the shared endpoint.
 
----
+### After this fix,  build is successful
 
-## Summary Checklist
-- Set up Docker and Docker Compose.
-- Clone and build Docker images.
-- Debug and fix issues in code, Dockerfiles, or `docker-compose.yml`.
-- Start containers and verify application accessibility on port 80.
-- Upload files to a new GitHub repository and grant access to `devops@qoala.id`.
-- Submit screenshots and a concise report of issues and solutions.
-- (Bonus) Deploy on a cloud provider and share endpoint details.
 
----
+### SCREENSHOT
+![alt text](screenshots/nginx_build.png)
 
-Good luck, and happy debugging!
+## some-python-app
+
+### Fixing Errors in DockerFile
+There are some spelling and syntax errors in python/Dockerfile that needs to be fixed.
+
+
+```diff
+FROM python:3.9
+
+- WORKDIR /appp
++ WORKDIR /app
+
+- COPY appy.py /app
++ COPY app.py /app
+
+- RUN pip install flask netiface
++ RUN pip install flask netifaces
+
+- EXPOSE "eight thousand"
++ EXPOSE 8000
+
+- CMD ["pythn", "app.py"]
++ CMD ["python", "app.py"]
+```
+
+## Building The image
+
+### Command
+Run this command inside the python directory.
+
+```sudo docker build . -t local-python-app ```
+
+### SCREENSHOT
+
+
+![alt text](screenshots/python_build.png)
+
+
+
+## docker-compose
+
+### Fixing Errors in docker-compose.yaml
+
+``` diff 
+version: '3.8'
+
+services:
+  nginx:
+    image: local-nginx
+    ports:
+-      - "eighty:80"
++      - "80:80"
+    volumes:
+-      - ./nginx/nginx.conf:/etc/nginx/nginx.confi
++      - ./nginx/nginx.conf:/etc/nginx/nginx.config
+    networks:
+      - nginx-network
+
+  python-app:
+    image: local-python-app
+    container_name: python_app
+    expose:
+-      - "eight thousand"
++      - "8000"
+    networks:
+      - nginx-network
+
+networks:
+  nginx-network:
+-    driver: bridg
++    driver: bridge
+-    options:
+-      compelex_option: value
+
+```
+
+## Running
+
+### Command
+Run this command in the base folder directory.
+
+``` sudo docker compose up ```
+
+### Error Logs
+
+```
+WARN[0000] /home/kanishak/Desktop/devops-internship-challenge/docker-compose.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion
+[+] Running 3/3
+ ✔ Network devops-internship-challenge_nginx-network  Created                                                                                 0.1s
+ ✔ Container python_app                               Created                                                                                 0.1s
+ ✔ Container devops-internship-challenge-nginx-1      Created                                                                                 0.1s
+Attaching to nginx-1, python_app
+nginx-1     | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+nginx-1     | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+nginx-1     | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+nginx-1     | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+nginx-1     | 10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+nginx-1     | /docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
+nginx-1     | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+nginx-1     | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+nginx-1     | /docker-entrypoint.sh: Configuration complete; ready for start up
+nginx-1     | 2024/11/02 07:26:50 [emerg] 1#1: unknown directive "worker_process" in /etc/nginx/nginx.conf:3
+nginx-1     | nginx: [emerg] unknown directive "worker_process" in /etc/nginx/nginx.conf:3
+python_app  |  * Serving Flask app 'app'
+python_app  |  * Debug mode: off
+nginx-1 exited with code 1
+python_app  | WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+python_app  |  * Running on all addresses (0.0.0.0)
+python_app  |  * Running on http://127.0.0.1:8000
+python_app  |  * Running on http://172.18.0.2:8000
+python_app  | Press CTRL+C to quit
+
+```
+
+### Errors
+
+- The logs Indicate that there are some some errors in the nginx.conf file.
+
+### Fixes
+
+There are some spelling/syntax errors in the code.
+
+```diff
+- worker_process auto
++ worker_processes auto;
+
+events {
+-   worker_connection 1024;
++   worker_connections 1024;
+}
+
+http {
+-   include       /etc/nginx/mime.typess;
++   include       /etc/nginx/mime.types;
+-   default_typ application/octet-stream;
++   default_type application/octet-stream;
+
+    server {
+        listen 80;
+        server_name localhost;
+
+        location / {
+            proxy_pass http://python_app:8000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+}
+
+```
+### After this fix , build the local-nginx image again and then run docker compose.
+
+
+### Browser Window
+![alt text](image.png)
+
+
+### Nginx Logs
+![alt text](screenshots/compose_logs.png)
+
