@@ -6,7 +6,7 @@
 
 #### The Instructions to this assignment are found [HERE](assignment.md).
 
-### The Report can be found [HERE](report.pdf).
+### The Report can be found [HERE](Report.pdf).
 
 ## local-nginx
 ### Fixing Errors in Dockerfile
